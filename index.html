@@ -406,8 +406,8 @@
               <td class="cve"><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-114052" target="_blank" rel="noopener">CVE-2026-114052</a></td>
               <td><span class="target">vLLM</span><br><small>0.25.0 – 0.31.0 이전</small></td>
               <td>Memory Exhaustion<br><small>CWE-770</small></td>
-              <td>MOSS-Audio 서빙에서 요청마다 다른 <code>mm_processor_kwargs</code> 값을 제한 없이 캐시해, 인증 없이 <code>/tokenize</code>로 메모리를 고갈시켜 API 프로세스 종료</td>
-              <td><span class="badge team">팀 발견</span></td>
+              <td>인증 없이 <code>/tokenize</code> 요청으로 캐시를 무제한 증가시켜 메모리 고갈(DoS)</td>
+              <td><span class="badge team">원인 분석 참여</span></td>
             </tr>
             <tr>
               <td class="cve"><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-70329" target="_blank" rel="noopener">CVE-2025-70329</a></td>
