@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>신가영 | Security Researcher</title>
+<meta name="description" content="신가영 Security Researcher 포트폴리오 · 취약점 분석, IoT 보안, AI 보안, 디지털 포렌식">
+<meta property="og:title" content="신가영 | Security Researcher">
+<meta property="og:description" content="취약점 분석, IoT 보안, AI 보안, 디지털 포렌식">
+<meta property="og:image" content="https://yeong-yi.github.io/assets/alpaca.jpg">
+<meta property="og:url" content="https://yeong-yi.github.io/">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/alpaca.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script>
+  // 기본은 다크 모드, 방문자가 직접 바꾼 모드가 있으면 그걸 써요
+  var t = 'dark';
+  try { t = localStorage.getItem('theme') || 'dark'; } catch (e) {}
+  document.documentElement.setAttribute('data-theme', t);
+</script>
+<style>
+  :root {
+    --blue: #3F73B5;
+    --blue-strong: #2F5E99;
+    --blue-soft: #E8F1FC;
+    --grad: linear-gradient(120deg, #2F5E99 0%, #3F73B5 45%, #7FA9DD 100%);
+    --bg: #FFFFFF;
+    --bg-sub: #F9FAFB;
+    --card: #FFFFFF;
+    --line: #E5E8EB;
+    --text: #191F28;
+    --text-2: #4E5968;
+    --text-3: #8B95A1;
+    --chip: #F2F4F6;
+    --nav-bg: rgba(255, 255, 255, 0.82);
+    --shadow: 0 1px 3px rgba(0, 27, 55, 0.04), 0 8px 24px rgba(0, 27, 55, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --blue: #A8CBF0;
+      --blue-strong: #CFE2F7;
+      --blue-soft: rgba(168, 203, 240, 0.14);
+      --grad: linear-gradient(120deg, #7FA9DD 0%, #A8CBF0 50%, #E3EEFB 100%);
+      --bg: #101013;
+      --bg-sub: #17171C;
+      --card: #1D1D23;
+      --line: #2C2C35;
+      --text: #F2F2F4;
+      --text-2: #B0B0B8;
+      --text-3: #7E7E87;
+      --chip: #26262E;
+      --nav-bg: rgba(16, 16, 19, 0.8);
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --blue: #A8CBF0;
+    --blue-strong: #CFE2F7;
+    --blue-soft: rgba(168, 203, 240, 0.14);
+    --grad: linear-gradient(120deg, #7FA9DD 0%, #A8CBF0 50%, #E3EEFB 100%);
+    --bg: #101013;
+    --bg-sub: #17171C;
+    --card: #1D1D23;
+    --line: #2C2C35;
+    --text: #F2F2F4;
+    --text-2: #B0B0B8;
+    --text-3: #7E7E87;
+    --chip: #26262E;
+    --nav-bg: rgba(16, 16, 19, 0.8);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    font-size: 16.5px;
+    line-height: 1.7;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .3s ease, color .3s ease;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- 메뉴바: 소개 바로 아래에서 시작해서, 스크롤하면 위에 붙어요 ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--nav-bg);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transition: box-shadow .2s ease;
+  }
+  .nav.scrolled { box-shadow: 0 4px 16px rgba(0, 27, 55, 0.06); }
+  .menu { display: flex; height: 50px; gap: 4px; margin-left: -14px; padding-right: 56px; overflow-x: auto; scrollbar-width: none; }
+  .menu::-webkit-scrollbar { display: none; }
+  .menu a {
+    position: relative; display: flex; align-items: center; padding: 0 14px;
+    font-size: 16.5px; font-weight: 700; color: var(--text); white-space: nowrap;
+    transition: color .15s ease;
+  }
+  .menu a:hover { color: var(--blue); }
+  .menu a.active { color: var(--blue); }
+  .menu a.active::after {
+    content: ""; position: absolute; left: 14px; right: 14px; bottom: 0; height: 3px;
+    border-radius: 3px 3px 0 0; background: var(--blue);
+  }
+  /* 모드 전환 버튼은 항상 오른쪽 위에 고정 */
+  .theme-btn {
+    position: fixed; z-index: 60; top: 8px; right: max(16px, calc((100vw - 1040px) / 2 + 24px));
+    width: 34px; height: 34px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--card); color: var(--text-2);
+    display: grid; place-items: center; cursor: pointer;
+    transition: background-color .15s ease, transform .15s ease;
+  }
+  .theme-btn:hover { background: var(--chip); }
+  .theme-btn:active { transform: scale(.94); }
+  .theme-btn svg { width: 18px; height: 18px; }
+  .icon-sun { display: none; }
+  :root[data-theme="dark"] .icon-sun { display: block; }
+  :root[data-theme="dark"] .icon-moon { display: none; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .icon-sun { display: block; }
+    :root:not([data-theme="light"]) .icon-moon { display: none; }
+  }
+
+  /* ---------- 첫 화면 ---------- */
+  .hero { padding: 88px 0 56px; position: relative; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: -40% -10% auto auto; width: 620px; height: 620px;
+    background: radial-gradient(circle, rgba(168,203,240,.14), transparent 65%);
+    pointer-events: none;
+  }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; color: var(--blue); }
+  .eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
+  .name { margin: 16px 0 4px; font-size: clamp(44px, 7vw, 72px); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; }
+  .name .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .name-en { font-size: 19px; color: var(--text-3); font-weight: 500; }
+  .id-row { display: flex; align-items: center; gap: 24px; margin-top: 16px; }
+  .id-row .name { margin: 0; }
+  .avatar {
+    flex: none; width: 96px; height: 96px; border-radius: 50%; object-fit: cover;
+    border: 3px solid var(--bg); box-shadow: 0 0 0 2px var(--blue), 0 8px 24px rgba(168, 203, 240, .35);
+  }
+  @media (max-width: 640px) {
+    .id-row { gap: 16px; }
+    .avatar { width: 72px; height: 72px; }
+  }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 32px; align-items: center; }
+  .hero-card { border-top: 1px solid var(--text); }
+  .hero-card .facts { margin: 0; display: block; }
+  .hero-card .row { display: grid; grid-template-columns: 90px 1fr; gap: 16px; padding: 13px 2px; border-bottom: 1px solid var(--line); font-size: 15.5px; }
+  .hero-card .row dt { font-size: 14.5px; font-weight: 500; color: var(--text-3); padding: 0; letter-spacing: 0; }
+  .hero-card .row dd { margin: 0; color: var(--text); }
+  .hero-card .about-row dd { font-weight: 600; }
+  @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; gap: 32px; } }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 24px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 11px; border-radius: 999px; background: var(--chip);
+    font-size: 13.5px; font-weight: 500; color: var(--text);
+    transition: background-color .15s ease, transform .15s ease;
+  }
+  .chip:hover { background: var(--blue-soft); color: var(--blue); }
+  .chip:active { transform: scale(.97); }
+  .chip svg { width: 14px; height: 14px; }
+  .chip.primary { background: var(--blue); color: #fff; }
+  .chip.primary:hover { background: var(--blue-strong); color: #fff; }
+  :root[data-theme="dark"] .chip.primary { background: #4F7FB8; color: #fff; }
+  :root[data-theme="dark"] .chip.primary:hover { background: #5C8CC4; color: #fff; }
+
+  /* ---------- 공통 섹션 ---------- */
+  section.block { padding: 72px 0; border-top: 1px solid var(--line); }
+  .nav + section.block { border-top: none; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 32px; }
+  .sec-num { font-size: 15px; font-weight: 700; color: var(--blue); font-variant-numeric: tabular-nums; }
+  .sec-title { margin: 0; font-size: 31px; font-weight: 800; letter-spacing: -0.02em; }
+  .sec-desc { margin: -16px 0 28px; color: var(--text-2); }
+
+  /* CVE 표 */
+  .table-wrap { border-radius: 20px; border: 1px solid var(--line); overflow-x: auto; background: var(--card); box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; font-size: 15.5px; min-width: 790px; }
+  th { text-align: left; padding: 14px 20px; font-size: 13.5px; font-weight: 600; color: var(--text-3); background: var(--bg-sub); border-bottom: 1px solid var(--line); }
+  td { padding: 18px 20px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--text-2); }
+  tr:last-child td { border-bottom: none; }
+  td.cve a { font-weight: 700; color: var(--blue); white-space: nowrap; }
+  td.cve a:hover { text-decoration: underline; }
+  td .target { color: var(--text); font-weight: 600; white-space: nowrap; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+  .badge.team { background: var(--chip); color: var(--text-2); }
+  code { font-family: var(--mono); font-size: .9em; padding: 1px 6px; border-radius: 6px; background: var(--chip); color: var(--text); }
+  .note { margin-top: 14px; font-size: 14.5px; color: var(--text-3); }
+
+  /* 프로젝트 카드: 바깥은 카드, 안쪽은 번호와 구분선 */
+  .projects { display: grid; gap: 20px; counter-reset: proj; }
+  .project {
+    padding: 0; overflow: hidden; border-radius: 20px; background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow);
+    counter-increment: proj; transition: border-color .2s ease;
+  }
+  .project:hover { border-color: var(--blue); }
+  .p-top { display: grid; grid-template-columns: 56px 1fr auto; align-items: start; gap: 0 16px; padding: 22px 28px; background: var(--chip); border-bottom: 1px solid var(--line); }
+  .p-top::before { content: counter(proj, decimal-leading-zero); font-size: 30px; font-weight: 800; line-height: 1.1; color: var(--blue); letter-spacing: -0.02em; }
+  .p-cat { font-size: 14px; font-weight: 700; color: var(--blue); }
+  .p-title { margin: 4px 0 4px; font-size: 22.5px; font-weight: 700; line-height: 1.4; letter-spacing: -0.02em; }
+  .p-meta { font-size: 14.5px; color: var(--text-3); }
+  .p-period { font-size: 14.5px; font-weight: 600; color: var(--text-3); font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .p-rows { display: grid; grid-template-columns: 112px 1fr; gap: 0; margin: 22px 28px 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .p-rows dt, .p-rows dd { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .p-rows dt { font-size: 14px; font-weight: 600; color: var(--text-3); padding: 12px; background: var(--bg-sub); border-right: 1px solid var(--line); display: flex; align-items: center; justify-content: center; text-align: center; }
+  .p-rows dd { margin: 0; color: var(--text-2); font-size: 15.5px; padding-left: 18px; padding-right: 20px; }
+  .p-rows ul { margin: 0; padding-left: 18px; }
+  .p-rows li { margin-bottom: 4px; }
+  .p-rows li:last-child { margin-bottom: 0; }
+  .p-rows .tech { color: var(--text-3); }
+  .p-rows strong { color: var(--text); font-weight: 600; }
+  .p-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; padding: 16px 28px 0; }
+  .p-rows dt:last-of-type, .p-rows dd:last-of-type { border-bottom: none; }
+  .project > :last-child { margin-bottom: 24px; }
+  .p-foot-label { font-size: 14.5px; color: var(--text-3); margin-right: 2px; }
+  .link { display: inline-flex; align-items: center; gap: 4px; font-size: 14.5px; font-weight: 600; color: var(--blue); padding: 6px 13px; border-radius: 10px; background: var(--blue-soft); }
+  .link:hover { filter: brightness(.95); }
+
+  .rlist { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--text); }
+  .rlist li { display: grid; grid-template-columns: 190px 1fr; gap: 16px; padding: 16px 2px; border-bottom: 1px solid var(--line); }
+  .r-date { font-size: 14.5px; color: var(--text-3); font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .r-dur { display: block; font-style: normal; font-size: 13.5px; color: var(--blue); margin-top: 2px; }
+  .r-main b { display: block; font-size: 17px; font-weight: 600; color: var(--text); }
+  .r-main .org { font-style: normal; font-weight: 600; color: var(--blue); }
+  .r-main span { display: block; font-size: 14.5px; color: var(--text-3); margin-top: 2px; }
+  .r-main .detail { margin-top: 6px; color: var(--text-2); line-height: 1.6; }
+  @media (max-width: 640px) { .rlist li { grid-template-columns: 1fr; gap: 4px; } }
+
+
+  /* Education: 세로 타임라인 */
+  .tl { border-top: none; }
+  .tl li { border-bottom: none; padding: 0; }
+  .tl .r-date { padding-top: 1px; text-align: right; }
+  .tl .r-main { position: relative; padding: 0 0 30px 28px; border-left: 2px solid var(--line); }
+  .tl li:last-child .r-main { padding-bottom: 0; }
+  .tl .r-main::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--blue); }
+  .tl li:first-child .r-main::before { background: var(--blue); }
+
+
+  /* Certifications: 한 줄 카드 */
+  .cert { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 28px; border-radius: 20px; border: 1px dashed var(--line); }
+  .cert b { font-size: 17px; font-weight: 700; margin-right: 12px; }
+  .cert span { font-size: 14.5px; }
+  .cert .org { font-style: normal; font-weight: 600; color: var(--blue); }
+  .cert-date { font-family: var(--mono); font-size: 13.5px; color: var(--text-3); }
+
+
+  @media (max-width: 640px) {
+    .tl .r-date { text-align: left; }
+    .tl li { gap: 2px; }
+    .cert { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* Contact */
+  .contact { text-align: center; padding: 96px 0; }
+  .contact h2 { margin: 0; font-size: clamp(26px, 4vw, 36px); font-weight: 800; letter-spacing: -0.02em; }
+  .contact p { color: var(--text-2); margin: 12px 0 0; }
+  .contact .chips { justify-content: center; }
+  .mail-link { font-size: 19px; font-weight: 600; color: var(--blue); border-bottom: 1px solid transparent; transition: border-color .15s ease; }
+  .mail-link:hover { border-bottom-color: var(--blue); }
+  footer { padding: 32px 0 48px; text-align: center; font-size: 13.5px; color: var(--text-3); }
+
+
+  /* 고정폭(코드) 글꼴 포인트: 숫자·날짜·라벨에만 */
+  :root { --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Pretendard Variable", monospace; }
+  .eyebrow, .sec-num, .p-top::before, .p-period, .r-date, .r-dur,
+  .hero-card .row dt, td.cve a, th, .badge, .p-foot-label { font-family: var(--mono); letter-spacing: -0.02em; }
+  .p-top::before { font-weight: 700; }
+  .sec-num::before { content: "/"; opacity: .5; margin-right: 1px; }
+  .r-date, .p-period { font-size: 13.5px; }
+  .hero-card .row dt { font-size: 13.5px; }
+
+  /* 스크롤하면 스르륵 올라오는 효과 */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.above { transform: translateY(-28px); }
+  .reveal.show { opacity: 1; transform: none; }
+  .reveal.d1 { transition-delay: .08s; } .reveal.d2 { transition-delay: .16s; } .reveal.d3 { transition-delay: .24s; } .reveal.d4 { transition-delay: .32s; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* 화면 폭이 좁을 때 */
+  @media (max-width: 640px) {
+    .wrap { padding: 0 16px; }
+    .menu { margin-left: -10px; }
+    .menu a { padding: 0 10px; font-size: 15.5px; }
+    .menu a.active::after { left: 10px; right: 10px; }
+    .hero { padding: 56px 0 48px; }
+    section.block { padding: 56px 0; }
+    .project { padding: 0; }
+    .p-top { grid-template-columns: 40px 1fr; padding: 18px 20px; }
+    .p-top::before { font-size: 23px; }
+    .p-period { grid-column: 2; padding-top: 6px; }
+    .p-rows { grid-template-columns: 1fr; margin-left: 0; }
+    .p-rows { margin: 16px 16px 0; }
+    .p-rows dt { border-bottom: none; border-right: none; padding: 10px 16px 4px; justify-content: flex-start; }
+    .p-rows dd { padding: 6px 16px 12px; }
+    .p-foot { padding: 14px 16px 0; }
+    .project > :last-child { margin-bottom: 18px; }
+  }
+
+  /* PDF 출력용 */
+  @media print {
+    :root, :root[data-theme] { --bg: #fff; --bg-sub: #F9FAFB; --blue: #3F73B5; --blue-soft: #E8F1FC; --card: #fff; --text: #191F28; --text-2: #4E5968; --text-3: #8B95A1; --line: #E5E8EB; --chip: #F2F4F6; --shadow: none; }
+    .nav, .theme-btn, .hero::before { display: none !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .project, .table-wrap, .rlist li { break-inside: avoid; }
+    section.block { padding: 40px 0; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-btn" id="themeBtn" type="button" aria-label="다크 모드와 라이트 모드 전환">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+</button>
+
+<main id="top">
+  <!-- 첫 화면: 나에 대한 소개가 먼저 -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-left">
+      <div class="eyebrow reveal">Security Researcher</div>
+      <div class="id-row reveal d1">
+        <img class="avatar" src="assets/alpaca.jpg" alt="알파카 프로필 사진" width="96" height="96">
+        <div>
+          <h1 class="name"><span class="grad">신가영</span></h1>
+          <div class="name-en">Gayeong Shin</div>
+        </div>
+      </div>
+
+      <div class="chips reveal d3">
+        <a class="chip primary" href="mailto:shingayeong.01@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          shingayeong.01@gmail.com
+        </a>
+        <a class="chip" href="https://github.com/yeong-yi" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>
+          GitHub
+        </a>
+        <a class="chip" href="https://goodalpaca.tistory.com/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+          Tech Blog
+        </a>
+        <a class="chip" href="https://www.linkedin.com/in/gayeong-shin-3789ba41b/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.7 4.8 6.1V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+      </div>
+      <div class="hero-card reveal d2">
+        <dl class="facts">
+          <div class="row about-row"><dt>About</dt><dd>Root Cause 분석에 집중하며, 공격과 방어 양쪽에 관심이 있습니다.</dd></div>
+          <div class="row"><dt>Interests</dt><dd>취약점 분석, IoT 보안, AI 보안, 디지털 포렌식 등</dd></div>
+          <div class="row"><dt>Now</dt><dd>BoB 15기 보안컨설팅 트랙</dd></div>
+          <div class="row"><dt>Education</dt><dd>백석대학교 정보보호학과 졸업</dd></div>
+        </dl>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 메뉴바: 소개 바로 아래, 스크롤하면 위에 고정 -->
+  <header class="nav" id="nav">
+    <div class="wrap">
+      <nav class="menu" aria-label="주요 메뉴">
+        <a href="#cve">CVE</a>
+        <a href="#projects">Projects</a>
+        <a href="#education">Education</a>
+        <a href="#awards">Awards</a>
+        <a href="#activities">Activities</a>
+        <a href="#certifications">Certifications</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 01 CVE -->
+  <section class="block" id="cve">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">01</span><h2 class="sec-title">CVE</h2></div>
+      <p class="sec-desc reveal">K-Shield Jr. 15기 팀(Neighborhood-Hacker)으로 상용 공유기 펌웨어를 분석해 발급받은 zero-day 취약점입니다.</p>
+      <div class="table-wrap reveal">
+        <table>
+          <thead>
+            <tr><th>CVE</th><th>대상</th><th>유형</th><th>요약</th><th>나의 기여</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="cve"><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-70329" target="_blank" rel="noopener">CVE-2025-70329</a></td>
+              <td><span class="target">TOTOLINK X5000R</span></td>
+              <td>OS Command Injection<br><small>CWE-78</small></td>
+              <td><code>setIptvCfg</code> 핸들러에서 VLAN 설정값이 검증 없이 셸 명령에 삽입되어 임의 명령 실행(RCE)</td>
+              <td><span class="badge team">발견</span></td>
+            </tr>
+            <tr>
+              <td class="cve"><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-70328" target="_blank" rel="noopener">CVE-2025-70328</a></td>
+              <td><span class="target">TOTOLINK X6000R</span></td>
+              <td>OS Command Injection<br><small>CWE-78</small></td>
+              <td><code>NTPSyncWithHost</code> 핸들러의 <code>host_time</code> 값이 일부만 검증되어 인증 후 임의 명령 실행</td>
+              <td><span class="badge team">원인 분석 참여</span></td>
+            </tr>
+            <tr>
+              <td class="cve"><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-70327" target="_blank" rel="noopener">CVE-2025-70327</a></td>
+              <td><span class="target">TOTOLINK X5000R</span></td>
+              <td>Argument Injection<br><small>CWE-88</small></td>
+              <td><code>setDiagnosisCfg</code> 핸들러의 <code>ip</code> 값으로 ping 옵션을 주입해 서비스 거부 유발</td>
+              <td><span class="badge team">원인 분석 참여</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note reveal">분석 보고서와 PoC: <a class="link" href="https://github.com/neighborhood-H/0-DAY" target="_blank" rel="noopener">Zero-day 보고서 ↗</a></p>
+    </div>
+  </section>
+
+  <!-- 02 Projects -->
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">02</span><h2 class="sec-title">Projects</h2></div>
+
+      <div class="projects">
+        <!-- 1. zero-day -->
+        <article class="project reveal">
+          <div class="p-top">
+            <div>
+              <div class="p-cat">Vulnerability Research · 팀 프로젝트</div>
+              <h3 class="p-title">소형 네트워크 장비 취약점 패턴 분석 및 신규 zero-day 발굴</h3>
+              <div class="p-meta">K-Shield Jr. 15기 취약점 분석과정 · 6인</div>
+            </div>
+            <div class="p-period">2025.09 – 2025.12</div>
+          </div>
+          <dl class="p-rows">
+            <dt>내용</dt>
+            <dd>공개된 one-day 취약점의 패턴을 분석하고, 이를 기반으로 최신 공유기에서 신규 zero-day 발굴</dd>
+            <dt>역할</dt>
+            <dd><ul>
+              <li>one-day 2건(CVE-2025-52906, CVE-2024-21821) 재현 및 취약 패턴 분석, PoC 작성</li>
+              <li>도출한 패턴을 최신 장비에 적용해 X5000R <code>setIptvCfg</code> OS 명령어 주입 발견 (CVE-2025-70329)</li>
+              <li>최종 발표 자료 제작, 리포트 양식 정리</li>
+            </ul></dd>
+            <dt>성과</dt>
+            <dd>one-day <strong>6종</strong> 분석, PoC <strong>5건</strong>, CVE <strong>3건</strong> 발급</dd>
+            <dt>기술</dt>
+            <dd class="tech">IoT Security, Firmware Analysis, Vulnerability Research, Reversing</dd>
+          </dl>
+          <div class="p-foot">
+            <span class="p-foot-label">GitHub:</span>
+            <a class="link" href="https://github.com/neighborhood-H/0-DAY" target="_blank" rel="noopener">Zero-day 보고서 ↗</a>
+            <a class="link" href="https://github.com/neighborhood-H/1-DAY_Confirmation" target="_blank" rel="noopener">One-day 분석 보고서 ↗</a>
+          </div>
+        </article>
+
+        <!-- 2. BoB 본 프로젝트 -->
+        <article class="project reveal">
+          <div class="p-top">
+            <div>
+              <div class="p-cat">AI Infra Security · 팀 프로젝트</div>
+              <h3 class="p-title">기업 LLM 서빙엔진 업데이트 보안 검증 자동화 솔루션 및 프레임워크 개발</h3>
+              <div class="p-meta">BoB 15기 보안컨설팅 트랙 · 4인</div>
+            </div>
+            <div class="p-period">2026.07 – 진행 중</div>
+          </div>
+          <dl class="p-rows">
+            <dt>내용</dt>
+            <dd>서빙엔진 보안 프레임워크와 점검 기준을 만들고, 업데이트 전후 검증 자동화부터 운영 중 정책 유지까지 연결</dd>
+            <dt>역할</dt>
+            <dd><ul>
+              <li>서빙엔진 동작 흐름 기반 위협 모델링</li>
+              <li>운영 중 위험 분석 및 런타임 탐지·차단 개발 (API 게이트웨이, Tetragon, Cilium)</li>
+            </ul></dd>
+            <dt>성과</dt>
+            <dd><ul>
+              <li>프로젝트 진행 중</li>
+              <li>관련 논문: <strong>ACK 2026 논문경진대회 은상</strong> (한국정보처리학회) · 「vLLM 보안 수정에서 보안 함수 호출 누락에 대한 회귀 시험의 검출 한계 연구」</li>
+            </ul></dd>
+            <dt>기술</dt>
+            <dd class="tech">Security for AI, LLM Serving Security, Threat Modeling, Runtime Security</dd>
+          </dl>
+        </article>
+
+        <!-- 3. 포렌식 -->
+        <article class="project reveal">
+          <div class="p-top">
+            <div>
+              <div class="p-cat">Digital Forensics · 개인 프로젝트</div>
+              <h3 class="p-title">디지털 포렌식 가상 침해사고 분석 보고서</h3>
+              <div class="p-meta">개인 연구</div>
+            </div>
+            <div class="p-period">2024.12 – 2025.01</div>
+          </div>
+          <dl class="p-rows">
+            <dt>내용</dt>
+            <dd>가상 침해 시나리오를 직접 설계·수행하고 디스크 이미지를 포렌식 분석</dd>
+            <dt>역할</dt>
+            <dd><ul>
+              <li>레지스트리·이벤트 로그로 타임라인 재구성</li>
+              <li>BMP 이미지 안에 숨긴 ZIP 시그니처 식별 및 복구</li>
+              <li>브라우저 아티팩트(SQLite) 연계 분석</li>
+            </ul></dd>
+            <dt>성과</dt>
+            <dd><strong>36페이지</strong> 분석 보고서 단독 작성</dd>
+            <dt>기술</dt>
+            <dd class="tech">Digital Forensics, Incident Analysis, Autopsy</dd>
+          </dl>
+          <div class="p-foot">
+            <span class="p-foot-label">GitHub:</span>
+            <a class="link" href="https://github.com/yeong-yi/Digital-Forensics-Artifact-Analysis-Report" target="_blank" rel="noopener">포렌식 분석 보고서 ↗</a>
+          </div>
+        </article>
+
+        <!-- 4. AUL -->
+        <article class="project reveal">
+          <div class="p-top">
+            <div>
+              <div class="p-cat">Digital Forensics · 학부연구생</div>
+              <h3 class="p-title">Apple OS AUL 기반 연속성(Continuity) 기능 연구</h3>
+              <div class="p-meta">백석대학교 정보보호학과 디지털포렌식 연구실</div>
+            </div>
+            <div class="p-period">2025.11 – 2026.06</div>
+          </div>
+          <dl class="p-rows">
+            <dt>내용</dt>
+            <dd>AirDrop 등 Apple 연속성 기능 동작 시 남는 통합 로그(AUL) 분석</dd>
+            <dt>역할</dt>
+            <dd><ul>
+              <li>기기 간 교차 테스트 설계 및 로그 수집</li>
+              <li>핵심 프로세스 데이터 흐름, 기기 식별자 매핑 분석</li>
+            </ul></dd>
+            <dt>성과</dt>
+            <dd>학회 논문 투고 준비</dd>
+            <dt>기술</dt>
+            <dd class="tech">Digital Forensics, Apple Forensics, Log Analysis, macOS, iOS</dd>
+          </dl>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 03 Education -->
+  <section class="block" id="education">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">03</span><h2 class="sec-title">Education</h2></div>
+      <ul class="rlist tl reveal">
+          <li><div class="r-date">2026.07 – 현재</div><div class="r-main"><b>BoB(Best of the Best) 15기 보안컨설팅 트랙</b><span><em class="org">한국인터넷진흥원</em> · 차세대 보안리더 양성 프로그램</span><span class="detail">교육 중</span></div></li>
+          <li><div class="r-date">2025.07 – 2025.10</div><div class="r-main"><b>K-Shield Jr. 15기 취약점 분석과정 수료</b><span><em class="org">한국인터넷진흥원</em> · 300시간</span><span class="detail">웹 해킹, 시스템 해킹, 네트워크 해킹 실습과 취약점 진단 실무, 공유기 zero-day 발굴 팀 프로젝트 수행</span></div></li>
+          <li><div class="r-date">2025.03</div><div class="r-main"><b>[K-디지털] 시스템 보안 운영 수료</b><span><em class="org">한국기술교육대학교 온라인평생교육원</em> · 8시간</span><span class="detail">윈도우·리눅스 계정·권한 관리, 패스워드 크래킹·오버플로우·백도어 원리, 침입 예방 보안 설정</span></div></li>
+          <li><div class="r-date">2024.05</div><div class="r-main"><b>[K-디지털] 와이어샤크 네트워크 패킷 분석 수료</b><span><em class="org">한국기술교육대학교 온라인평생교육원</em> · 8시간</span><span class="detail">Wireshark로 패킷 캡처·필터링 및 프로토콜 분석</span></div></li>
+          <li><div class="r-date">2022.03 – 2026.02</div><div class="r-main"><b>백석대학교 컴퓨터공학부 정보보호학과 졸업</b><span>공학사 · 학점 3.71 / 4.5</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 04 Awards -->
+  <section class="block" id="awards">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">04</span><h2 class="sec-title">Awards</h2></div>
+      <ul class="rlist reveal">
+          <li><div class="r-date">2026.11</div><div class="r-main"><b>ACK 2026 논문경진대회 은상</b><span><em class="org">한국정보처리학회</em> · 「vLLM 보안 수정에서 보안 함수 호출 누락에 대한 회귀 시험의 검출 한계 연구」 (공동저자 4인)</span><span class="detail">vLLM 보안 수정 17건을 되돌린 변이 78개로 기존 회귀 시험을 평가해, 호출 누락형 변이 18개 중 14개가 검출되지 않는 공백을 확인하고 사용 지점 시험으로 보완할 수 있음을 보임</span></div></li>
+          <li><div class="r-date">2024.11</div><div class="r-main"><b>IIBC Start-up Invention Contest 단체상</b><span><em class="org">한국인터넷방송통신학회</em> · IT 자격증 정보 앱 ‘컴모자’ 개발</span></div></li>
+          <li><div class="r-date">2023.12</div><div class="r-main"><b>C언어 프로그래밍 경진대회 장려상</b><span><em class="org">백석대학교 컴퓨터공학부</em> · 알고리즘 구현 및 메모리 효율성 평가 부문</span></div></li>
+          <li><div class="r-date">2022.12</div><div class="r-main"><b>Smart IT 창작물 경진대회 장려상</b><span><em class="org">백석대학교 컴퓨터공학부</em> · 학과 정보 소개 웹페이지 ‘백석사전’ 개발 참여</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 05 Activities -->
+  <section class="block" id="activities">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">05</span><h2 class="sec-title">Activities</h2></div>
+      <ul class="rlist reveal">
+          <li><div class="r-date">2025.11 – 2026.06<em class="r-dur">8개월</em></div><div class="r-main"><b>디지털포렌식 연구실 학부연구생</b><span>macOS·iOS 등 Apple 아티팩트 분석, 논문 준비</span></div></li>
+          <li><div class="r-date">2022.09 – 2024.08<em class="r-dur">2년</em></div><div class="r-main"><b>컴퓨터공학부 실습실 근로장학생</b><span>실습실 장비 운영·환경 구축, 네트워크 설정, OS 설치 지원</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 06 Certifications -->
+  <section class="block" id="certifications">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">06</span><h2 class="sec-title">Certifications</h2></div>
+      <div class="cert reveal">
+        <div><b>정보처리기사</b><span><em class="org">한국산업인력공단</em></span></div>
+        <div class="cert-date">2025.09</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="block contact" id="contact">
+    <div class="wrap">
+      <h2 class="reveal">Contact</h2>
+      <p class="reveal d1"><a class="mail-link" href="mailto:shingayeong.01@gmail.com">shingayeong.01@gmail.com</a></p>
+      <div class="chips reveal d2">
+        <a class="chip" href="https://github.com/yeong-yi" target="_blank" rel="noopener">GitHub</a>
+        <a class="chip" href="https://goodalpaca.tistory.com/" target="_blank" rel="noopener">Tech Blog</a>
+        <a class="chip" href="https://www.linkedin.com/in/gayeong-shin-3789ba41b/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>© 2026 Gayeong Shin</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('themeBtn');
+    function current() {
+      var t = root.getAttribute('data-theme');
+      if (t) return t;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    btn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    // 메뉴바: 스크롤하면 아래 선 표시
+    var nav = document.getElementById('nav');
+    function onScroll() { nav.classList.toggle('scrolled', nav.getBoundingClientRect().top <= 0); }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // 스크롤하면 스르륵 올라오는 효과
+    var items = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          var el = en.target;
+          if (en.isIntersecting) {
+            el.classList.remove('above');
+            el.classList.add('show');
+          } else {
+            // 화면 밖으로 나가면 다시 숨겨서, 돌아올 때 또 스르륵 나타나게
+            el.classList.remove('show');
+            el.classList.toggle('above', en.boundingClientRect.top < 0);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      // (위로 다시 올라올 때는 위에서 아래로 내려오듯 나타나요)
+      items.forEach(function (el) { io.observe(el); });
+    } else {
+      items.forEach(function (el) { el.classList.add('show'); });
+    }
+    // 주소에 #섹션이 붙어서 열렸을 때도 화면 안의 내용은 바로 보이게
+    window.addEventListener('load', function () {
+      items.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('show');
+      });
+    });
+
+    // 지금 보고 있는 섹션을 메뉴에 표시
+    var links = document.querySelectorAll('.menu a');
+    var sections = Array.prototype.map.call(links, function (a) { return document.querySelector(a.getAttribute('href')); });
+    if ('IntersectionObserver' in window) {
+      var so = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id); });
+          }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      sections.forEach(function (s) { if (s) so.observe(s); });
+    }
+  })();
+</script>
+</body>
+</html>
