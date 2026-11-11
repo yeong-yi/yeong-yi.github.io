@@ -523,39 +523,7 @@
           </dl>
         </article>
 
-        <!-- 3. BugBori -->
-        <article class="project reveal">
-          <div class="p-top">
-            <div>
-              <div class="p-cat">Static Analysis · 개인 프로젝트</div>
-              <h3 class="p-title">BugBori — 역할 기반 멀티 에이전트 SAST 워크플로</h3>
-              <div class="p-meta">대상: Raspberry Pi UserLand (C/C++)</div>
-            </div>
-            <div class="p-period">2026.08</div>
-          </div>
-          <dl class="p-rows">
-            <dt>내용</dt>
-            <dd>대규모 C/C++ 저장소를 분할 탐색하고, 위험 함수 호출 후보를 코드 문맥과 원문 인용으로 검증하는 워크플로 설계·구현</dd>
-            <dt>역할</dt>
-            <dd><ul>
-              <li>후보 탐지 → 문맥 수집 → 우선순위화 → 보안 검토 → 인용 검증 → 보고서로 이어지는 6단계 에이전트 구조 설계</li>
-              <li>우선순위 후보의 입력 경로·버퍼 크기·방어 로직 검토</li>
-            </ul></dd>
-            <dt>성과</dt>
-            <dd><ul>
-              <li>654개 파일(약 23.6만 줄)에서 후보 <strong>583개</strong> 탐지, <strong>10건</strong> 정밀 검토</li>
-              <li><code>dtoverlay</code> 명령행 입력의 <code>strcpy</code> 경계 초과 가능성 <strong>1건</strong> 도출 (정적 근거 기준)</li>
-            </ul></dd>
-            <dt>기술</dt>
-            <dd class="tech">SAST, Source Code Review, C/C++, Memory Safety</dd>
-          </dl>
-          <div class="p-foot">
-            <span class="p-foot-label">GitHub:</span>
-            <a class="link" href="https://github.com/yeong-yi/ai-sast-userland" target="_blank" rel="noopener">BugBori 저장소 ↗</a>
-          </div>
-        </article>
-
-        <!-- 4. 포렌식 -->
+        <!-- 3. 포렌식 -->
         <article class="project reveal">
           <div class="p-top">
             <div>
