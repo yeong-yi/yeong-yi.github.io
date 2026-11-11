@@ -266,6 +266,27 @@
     .cert { flex-direction: column; align-items: flex-start; }
   }
 
+
+  /* Publications: 참고문헌 형식 / Awards: 오른쪽 등급 태그 */
+  .refs { list-style: none; margin: 0; padding: 0; }
+  .refs li { display: grid; grid-template-columns: 44px 1fr auto; gap: 16px; padding: 18px 0; border-bottom: 1px dashed var(--line); }
+  .refs li:first-child { padding-top: 0; }
+  .ref-no { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--blue); padding-top: 1px; }
+  .ref-main b { display: block; font-size: 17px; font-weight: 700; line-height: 1.5; }
+  .ref-venue { display: block; margin-top: 4px; font-size: 14.5px; font-style: italic; color: var(--text-3); }
+  .ref-sum { display: block; margin-top: 8px; font-size: 15px; color: var(--text-2); line-height: 1.6; }
+  .tg-wrap { display: flex; gap: 6px; align-items: flex-start; flex-wrap: wrap; justify-content: flex-end; }
+  .tg { font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--text-2); white-space: nowrap; }
+  .tg.hl { border-color: var(--blue); color: var(--blue); }
+  .aw-list li { grid-template-columns: 190px 1fr auto; align-items: center; }
+  .aw-list .r-main b .org { font-weight: 500; font-size: 15px; }
+  @media (max-width: 640px) {
+    .refs li { grid-template-columns: 32px 1fr; }
+    .refs .tg-wrap, .aw-list .tg-wrap { grid-column: 2; justify-content: flex-start; }
+    .aw-list li { grid-template-columns: 1fr; }
+    .aw-list .tg-wrap { grid-column: 1; }
+  }
+
   /* Contact */
   .contact { text-align: center; padding: 96px 0; }
   .contact h2 { margin: 0; font-size: clamp(26px, 4vw, 36px); font-weight: 800; letter-spacing: -0.02em; }
@@ -580,10 +601,10 @@
   <section class="block" id="publications">
     <div class="wrap">
       <div class="sec-head reveal"><span class="sec-num">04</span><svg class="sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg><h2 class="sec-title">Publications</h2></div>
-      <ul class="rlist reveal">
-          <li><div class="r-date">2026.11</div><div class="r-main"><b>vLLM 보안 수정에서 보안 함수 호출 누락에 대한 회귀 시험의 검출 한계 연구</b><span><em class="org">ACK 2026</em> · 한국정보처리학회 추계학술발표대회 · 4인 중 2저자 · 은상</span><span class="detail">vLLM 보안 수정 17건을 되돌린 변이 78개로 기존 회귀 시험을 평가해, 호출 누락형 변이 18개 중 14개가 검출되지 않는 공백을 확인하고 사용 지점 시험으로 보완할 수 있음을 보임</span></div></li>
-          <li><div class="r-date">2026.10</div><div class="r-main"><b>온라인 적응형 LLM 서빙에서 공유 추정기를 통한 사용자 간 성능 저하 공격 분석</b><span><em class="org">CISC-W'26</em> · 한국정보보호학회 동계학술대회 · 논문번호 338 · 구두발표 · 4인 중 3저자</span><span class="detail">악의적 피드백으로 공유 추정기를 포화시켜 다른 사용자의 처리량을 약 32% 떨어뜨리는 공격을 분석하고 대응 설계(GFC)를 제시함</span></div></li>
-      </ul>
+      <ol class="refs reveal">
+          <li><span class="ref-no">[1]</span><div class="ref-main"><b>vLLM 보안 수정에서 보안 함수 호출 누락에 대한 회귀 시험의 검출 한계 연구</b><span class="ref-venue">ACK 2026 · 한국정보처리학회 추계학술발표대회 · 2026.11</span><span class="ref-sum">vLLM 보안 수정 17건을 되돌린 변이 78개로 기존 회귀 시험을 평가해, 호출 누락형 변이 18개 중 14개가 검출되지 않는 공백을 확인하고 사용 지점 시험으로 보완할 수 있음을 보임</span></div><div class="tg-wrap"><span class="tg hl">은상</span><span class="tg">2저자</span></div></li>
+          <li><span class="ref-no">[2]</span><div class="ref-main"><b>온라인 적응형 LLM 서빙에서 공유 추정기를 통한 사용자 간 성능 저하 공격 분석</b><span class="ref-venue">CISC-W'26 · 한국정보보호학회 동계학술대회 · 2026.10 · 논문번호 338</span><span class="ref-sum">악의적 피드백으로 공유 추정기를 포화시켜 다른 사용자의 처리량을 약 32% 떨어뜨리는 공격을 분석하고 대응 설계(GFC)를 제시함</span></div><div class="tg-wrap"><span class="tg">구두발표</span><span class="tg">3저자</span></div></li>
+      </ol>
     </div>
   </section>
 
@@ -591,11 +612,11 @@
   <section class="block" id="awards">
     <div class="wrap">
       <div class="sec-head reveal"><span class="sec-num">05</span><svg class="sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"/><circle cx="12" cy="8" r="6"/></svg><h2 class="sec-title">Awards</h2></div>
-      <ul class="rlist reveal">
-          <li><div class="r-date">2026.11</div><div class="r-main"><b>ACK 2026 논문경진대회 은상</b><span><em class="org">한국정보처리학회</em> · 「vLLM 보안 수정에서 보안 함수 호출 누락에 대한 회귀 시험의 검출 한계 연구」 (공동저자 4인)</span><span class="detail">vLLM 보안 수정 17건을 되돌린 변이 78개로 기존 회귀 시험을 평가해, 호출 누락형 변이 18개 중 14개가 검출되지 않는 공백을 확인하고 사용 지점 시험으로 보완할 수 있음을 보임</span></div></li>
-          <li><div class="r-date">2024.11</div><div class="r-main"><b>IIBC Start-up Invention Contest 단체상</b><span><em class="org">한국인터넷방송통신학회</em> · IT 자격증 정보 앱 ‘컴모자’ 개발</span></div></li>
-          <li><div class="r-date">2023.12</div><div class="r-main"><b>C언어 프로그래밍 경진대회 장려상</b><span><em class="org">백석대학교 컴퓨터공학부</em> · 알고리즘 구현 및 메모리 효율성 평가 부문</span></div></li>
-          <li><div class="r-date">2022.12</div><div class="r-main"><b>Smart IT 창작물 경진대회 장려상</b><span><em class="org">백석대학교 컴퓨터공학부</em> · 학과 정보 소개 웹페이지 ‘백석사전’ 개발 참여</span></div></li>
+      <ul class="rlist aw-list reveal">
+          <li><div class="r-date">2026.11</div><div class="r-main"><b>ACK 2026 논문경진대회 <em class="org">· 한국정보처리학회</em></b><span>vLLM 보안 수정의 회귀 시험 검출 한계 연구 논문</span></div><div class="tg-wrap"><span class="tg hl">은상</span></div></li>
+          <li><div class="r-date">2024.11</div><div class="r-main"><b>IIBC Start-up Invention Contest <em class="org">· 한국인터넷방송통신학회</em></b><span>IT 자격증 정보 앱 ‘컴모자’ 개발</span></div><div class="tg-wrap"><span class="tg">단체상</span></div></li>
+          <li><div class="r-date">2023.12</div><div class="r-main"><b>C언어 프로그래밍 경진대회 <em class="org">· 백석대학교 컴퓨터공학부</em></b><span>알고리즘 구현 및 메모리 효율성 평가 부문</span></div><div class="tg-wrap"><span class="tg">장려상</span></div></li>
+          <li><div class="r-date">2022.12</div><div class="r-main"><b>Smart IT 창작물 경진대회 <em class="org">· 백석대학교 컴퓨터공학부</em></b><span>학과 정보 소개 웹페이지 ‘백석사전’ 개발 참여</span></div><div class="tg-wrap"><span class="tg">장려상</span></div></li>
       </ul>
     </div>
   </section>
