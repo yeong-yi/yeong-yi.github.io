@@ -307,6 +307,12 @@
   .hero-card .row dt { font-size: 13.5px; }
 
   /* 스크롤하면 스르륵 올라오는 효과 */
+  /* Education 타임라인: 왼쪽 선과 점은 고정, 오른쪽 내용만 옆에서 스르륵 */
+  .tl-anim li .r-date, .tl-anim li .r-main > * { opacity: 0; transform: translateX(36px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .tl-anim li .r-main > * { display: block; }
+  .tl-anim li .r-main > :nth-child(2) { transition-delay: .07s; }
+  .tl-anim li .r-main > :nth-child(3) { transition-delay: .14s; }
+  .tl-anim li.show .r-date, .tl-anim li.show .r-main > * { opacity: 1; transform: none; }
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
   .reveal.above { transform: translateY(-28px); }
   .reveal.show { opacity: 1; transform: none; }
@@ -314,6 +320,7 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .reveal { opacity: 1; transform: none; transition: none; }
+    .tl-anim li .r-date, .tl-anim li .r-main > * { opacity: 1; transform: none; transition: none; }
   }
 
   /* 화면 폭이 좁을 때 */
@@ -340,7 +347,7 @@
   @media print {
     :root, :root[data-theme] { --bg: #fff; --bg-sub: #F9FAFB; --blue: #3F73B5; --blue-soft: #E8F1FC; --card: #fff; --text: #191F28; --text-2: #4E5968; --text-3: #8B95A1; --line: #E5E8EB; --chip: #F2F4F6; --shadow: none; }
     .nav, .theme-btn, .hero::before { display: none !important; }
-    .reveal { opacity: 1 !important; transform: none !important; }
+    .reveal, .tl-anim li .r-date, .tl-anim li .r-main > * { opacity: 1 !important; transform: none !important; }
     .project, .table-wrap, .rlist li { break-inside: avoid; }
     section.block { padding: 40px 0; }
   }
@@ -587,7 +594,7 @@
   <section class="block" id="education">
     <div class="wrap">
       <div class="sec-head reveal"><span class="sec-num">03</span><svg class="sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><h2 class="sec-title">Education</h2></div>
-      <ul class="rlist tl reveal">
+      <ul class="rlist tl tl-anim">
           <li><div class="r-date">2026.07 – 현재</div><div class="r-main"><b>BoB(Best of the Best) 15기 보안컨설팅 트랙</b><span><em class="org">한국인터넷진흥원</em> · 차세대 보안리더 양성 프로그램</span><span class="detail">교육 중</span></div></li>
           <li><div class="r-date">2025.07 – 2025.10</div><div class="r-main"><b>K-Shield Jr. 15기 취약점 분석과정 수료</b><span><em class="org">한국인터넷진흥원</em> · 300시간</span><span class="detail">웹 해킹, 시스템 해킹, 네트워크 해킹 실습과 취약점 진단 실무, 공유기 zero-day 발굴 팀 프로젝트 수행</span></div></li>
           <li><div class="r-date">2025.03</div><div class="r-main"><b>[K-디지털] 시스템 보안 운영 수료</b><span><em class="org">한국기술교육대학교 온라인평생교육원</em> · 8시간</span><span class="detail">윈도우·리눅스 계정·권한 관리, 패스워드 크래킹·오버플로우·백도어 원리, 침입 예방 보안 설정</span></div></li>
@@ -681,7 +688,7 @@
     onScroll();
 
     // 스크롤하면 스르륵 올라오는 효과
-    var items = document.querySelectorAll('.reveal');
+    var items = document.querySelectorAll('.reveal, .tl-anim li');
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
